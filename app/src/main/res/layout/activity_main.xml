@@ -12,7 +12,38 @@
         android:layout_height="wrap_content"
         android:text="Logout"
         android:layout_alignParentRight="true"
-
         />
+
+    <EditText
+        android:id="@+id/etDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Description..."
+        android:layout_below="@id/btnLogout"
+    />
+
+    <Button
+        android:id="@+id/btnPicture"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Take Picture"
+        android:layout_below="@+id/etDescription"
+    />
+
+    <ImageView
+        android:id="@+id/ivPicture"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_below="@+id/btnPicture"
+        android:layout_centerHorizontal="true"
+    />
+
+    <Button
+        android:id="@+id/btnSubmit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivPicture"
+        android:text="Submit"
+    />
 
 </RelativeLayout>
