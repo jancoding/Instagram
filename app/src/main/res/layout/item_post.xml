@@ -1,29 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_margin="10dp"
-    android:orientation="vertical"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/tvUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="janvishahaha"
-        />
+        android:layout_marginLeft="10dp"
+        android:textStyle="bold"
+        tools:text="janvishahaha" />
 
     <ImageView
         android:id="@+id/ivImage"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:layout_below="@+id/tvUsername"
-        />
+        android:layout_below="@+id/tvUsername" />
+
+    <ImageView
+        android:id="@+id/ivHeart"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/ivImage"
+        android:layout_marginLeft="6dp"
+        android:src="@drawable/ufi_heart" />
+
+    <ImageView
+        android:id="@+id/ivComment"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/ivImage"
+        android:layout_marginLeft="6dp"
+        android:layout_toRightOf="@id/ivHeart"
+        android:src="@drawable/ufi_comment" />
+
+    <ImageView
+        android:id="@+id/ivTage"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/ivImage"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="6dp"
+        android:src="@drawable/ufi_save" />
+
+
+    <TextView
+        android:id="@+id/tvUsernameTwo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivHeart"
+        android:layout_marginLeft="10dp"
+        android:textStyle="bold"
+        tools:text="janvishahaha" />
 
     <TextView
         android:id="@+id/tvDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ivImage"
+        android:layout_below="@+id/ivHeart"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/tvUsernameTwo"
         tools:text="my headshot" />
-</LinearLayout>
+</RelativeLayout>

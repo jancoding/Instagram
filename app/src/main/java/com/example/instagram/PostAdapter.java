@@ -68,6 +68,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         TextView tvUsername;
         TextView tvDescription;
         ImageView ivImage;
+        TextView tvUsernameTwo;
 
         public ViewHolder(@NonNull View itemView) {
 
@@ -78,12 +79,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             tvUsername = itemView.findViewById(R.id.tvUsername);
             tvDescription = itemView.findViewById(R.id.tvDescription);
             ivImage = itemView.findViewById(R.id.ivImage);
+            tvUsernameTwo = itemView.findViewById(R.id.tvUsernameTwo);
             itemView.setOnClickListener(this);
         }
 
         public void bind(Post post, ViewHolder holder) {
             tvDescription.setText(post.getDescription());
             tvUsername.setText(post.getUser().getUsername());
+            tvUsernameTwo.setText(post.getUser().getUsername());
             ParseFile image = post.getImage();
             if (image != null) {
                 Glide.with(context).load(image.getUrl()).into(ivImage);
