@@ -82,8 +82,14 @@ public class MainActivity extends AppCompatActivity {
                 }
                 ParseUser currentUser = ParseUser.getCurrentUser();
                 savePost(description, currentUser, photoFile);
+                launchFeedActivity();
             }
         });
+    }
+
+    private void launchFeedActivity() {
+        Intent i = new Intent(MainActivity.this, FeedActivity.class);
+        startActivity(i);
     }
 
     private void launchCamera() {
