@@ -35,12 +35,12 @@ import java.util.List;
  */
 public class PostsFragment extends Fragment {
 
-    private RecyclerView rvPosts;
+    protected RecyclerView rvPosts;
     protected PostAdapter pAdapter;
     protected List<Post> posts = new ArrayList<>();
     protected SwipeRefreshLayout swipeContainer;
     protected Date oldestDate = new Date(System.currentTimeMillis());
-    private EndlessRecyclerViewScrollListener scrollListener;
+    protected EndlessRecyclerViewScrollListener scrollListener;
 
     public PostsFragment() {
         // Required empty public constructor
@@ -109,6 +109,8 @@ public class PostsFragment extends Fragment {
         getPosts();
 
     }
+
+
 
     protected void loadNextPosts() {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
