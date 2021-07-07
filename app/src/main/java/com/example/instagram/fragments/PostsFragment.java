@@ -1,53 +1,85 @@
-package com.example.instagram;
+package com.example.instagram.fragments;
+
+import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
-import android.widget.Toast;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
-import com.example.instagram.Fragments.ComposeFragment;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.example.instagram.EndlessRecyclerViewScrollListener;
+import com.example.instagram.Post;
+import com.example.instagram.PostAdapter;
+import com.example.instagram.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class FeedActivity extends AppCompatActivity {
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link PostsFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class PostsFragment extends Fragment {
 
-    RecyclerView rvPosts;
-    PostAdapter postAdapter;
-    List<Post> posts;
-    private SwipeRefreshLayout swipeContainer;
+    private RecyclerView rvPosts;
+    protected PostAdapter pAdapter;
+    protected List<Post> posts = new ArrayList<>();
+    protected SwipeRefreshLayout swipeContainer;
+    protected Date oldestDate = new Date(System.currentTimeMillis());
     private EndlessRecyclerViewScrollListener scrollListener;
-    private Date oldestDate = new Date(System.currentTimeMillis());
-    public static final String TAG = "FeedActivity";
+
+    public PostsFragment() {
+        // Required empty public constructor
+    }
+
+
+    public static PostsFragment newInstance(String param1, String param2) {
+        PostsFragment fragment = new PostsFragment();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_feed);
+        if (getArguments() != null) {
 
-        posts = new ArrayList<>();
-        rvPosts = findViewById(R.id.rvPosts);
-        postAdapter = new PostAdapter(this, posts);
-        rvPosts.setAdapter(postAdapter);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_posts, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        rvPosts = view.findViewById(R.id.rvPosts);
+        pAdapter = new PostAdapter(getContext(), posts);
+        rvPosts.setAdapter(pAdapter);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvPosts.setLayoutManager(linearLayoutManager);
 
         // Lookup the swipe container view
-        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         // Setup refresh listener which triggers new data loading
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -76,11 +108,9 @@ public class FeedActivity extends AppCompatActivity {
         rvPosts.addOnScrollListener(scrollListener);
         getPosts();
 
-
     }
 
-    private void loadNextPosts() {
-        // TODO: keep track of last created post
+    protected void loadNextPosts() {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
         query.whereLessThan("createdAt", oldestDate);
@@ -91,14 +121,14 @@ public class FeedActivity extends AppCompatActivity {
             public void done(List<Post> objects, ParseException e) {
                 posts.addAll(objects);
                 setOldest(objects);
-                postAdapter.notifyDataSetChanged();
+                pAdapter.notifyDataSetChanged();
             }
         });
 
 
     }
 
-    public void fetchPostsAsync(int page) {
+    protected void fetchPostsAsync(int page) {
         // Define the class we would like to query
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
@@ -110,10 +140,10 @@ public class FeedActivity extends AppCompatActivity {
         query.findInBackground(new FindCallback<Post>() {
             public void done(List<Post> itemList, ParseException e) {
                 if (e == null) {
-                    postAdapter.clear();
+                    pAdapter.clear();
                     posts.addAll(itemList);
                     setOldest(itemList);
-                    postAdapter.notifyDataSetChanged();
+                    pAdapter.notifyDataSetChanged();
                     swipeContainer.setRefreshing(false);
                 } else {
                     Log.d("item", "Error: " + e.getMessage());
@@ -123,7 +153,7 @@ public class FeedActivity extends AppCompatActivity {
 
     }
 
-    private void getPosts() {
+    protected void getPosts() {
         // Define the class we would like to query
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
@@ -136,9 +166,9 @@ public class FeedActivity extends AppCompatActivity {
             public void done(List<Post> itemList, ParseException e) {
                 if (e == null) {
                     // Access the array of results here
-                    postAdapter.clear();
+                    pAdapter.clear();
                     posts.addAll(itemList);
-                    postAdapter.notifyDataSetChanged();
+                    pAdapter.notifyDataSetChanged();
                     setOldest(itemList);
                 } else {
                     Log.d("item", "Error: " + e.getMessage());
@@ -147,7 +177,7 @@ public class FeedActivity extends AppCompatActivity {
         });
     }
 
-    private void setOldest(List<Post> posts) {
+    protected void setOldest(List<Post> posts) {
         for (Post post: posts) {
             if (post.getCreatedAt().before(oldestDate)) {
                 oldestDate = post.getCreatedAt();

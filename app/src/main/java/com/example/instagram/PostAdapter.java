@@ -2,20 +2,19 @@ package com.example.instagram;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
+import com.example.instagram.activities.DetailActivity;
 import com.parse.ParseFile;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.jetbrains.annotations.NotNull;
-import org.parceler.Parcels;
 
 import java.io.Serializable;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.example.instagram.Fragments;
+package com.example.instagram.fragments;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Environment;
@@ -24,9 +23,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.instagram.FeedActivity;
-import com.example.instagram.LoginActivity;
-import com.example.instagram.MainActivity;
+import com.example.instagram.activities.LoginActivity;
 import com.example.instagram.Post;
 import com.example.instagram.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
