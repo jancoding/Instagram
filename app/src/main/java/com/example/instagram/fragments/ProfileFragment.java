@@ -128,22 +128,6 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-//    private void loadNextPosts() {
-//        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-//        query.include(Post.KEY_USER);
-//        query.whereLessThan("createdAt", oldestDate);
-//        query.setLimit(20);
-//        query.whereEqualTo(Post.KEY_USER, ParseUser.getCurrentUser());
-//        query.addDescendingOrder("createdAt");
-//        query.findInBackground(new FindCallback<Post>() {
-//            @Override
-//            public void done(List<Post> objects, ParseException e) {
-//                posts.addAll(objects);
-//                setOldest(objects);
-//                pAdapter.notifyDataSetChanged();
-//            }
-//        });
-//    }
 
     private void setOldest(List<Post> posts) {
         for (Post post: posts) {

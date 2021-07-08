@@ -29,6 +29,8 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.io.Serializable;
 import java.util.List;
@@ -102,17 +104,34 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             ivComment = itemView.findViewById(R.id.ivComment);
             ivProfile = itemView.findViewById(R.id.ivProfile);
 
+
+
             ivHeart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Post post = posts.get(getAdapterPosition());
-                    post.setLikes(post.getLikes() + 1);
-                    post.saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            tvNumLikes.setText((Integer.parseInt(tvNumLikes.getText().toString()) + 1) + "");
-                        }
-                    });
+                    if (hasLiked()) {
+                        Log.d("PostAdapter", "unliking" );
+                        post.setLikes(post.getLikes() - 1);
+                        post.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                tvNumLikes.setText((Integer.parseInt(tvNumLikes.getText().toString()) - 1) + "");
+                                updateDatabaseUnliked();
+                            }
+                        });
+                    } else {
+                        Log.d("PostAdapter", "liking" );
+                        post.setLikes(post.getLikes() + 1);
+                        post.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                tvNumLikes.setText((Integer.parseInt(tvNumLikes.getText().toString()) + 1) + "");
+                                updateDatabaseLiked();
+                            }
+                        });
+                    }
+
                 }
             });
 
@@ -141,6 +160,49 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             itemView.setOnClickListener(this);
         }
 
+        private boolean hasLiked() {
+            Log.d("PostAdapter", "in has liked method" );
+            Post post = posts.get(getAdapterPosition());
+            JSONArray peopleLiked = post.getJSONArray("liked");
+            for (int i = 0; i<peopleLiked.length(); i++) {
+                try {
+                    Log.d("PostAdapter",peopleLiked.getString(i) );
+                    Log.d("PostAdapter", ParseUser.getCurrentUser().getObjectId().toString() );
+                    if (peopleLiked.getString(i).equals(ParseUser.getCurrentUser().getObjectId().toString())) {
+                        return true;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            return false;
+        }
+
+        private void updateDatabaseLiked() {
+            Post post = posts.get(getAdapterPosition());
+            JSONArray peopleLiked = post.getJSONArray("liked");
+            peopleLiked.put(ParseUser.getCurrentUser().getObjectId());
+            post.setLiked(peopleLiked);
+            post.saveInBackground();
+            ivHeart.setImageResource(R.drawable.ufi_heart_active);
+        }
+        private void updateDatabaseUnliked()  {
+            Post post = posts.get(getAdapterPosition());
+            JSONArray peopleLiked = post.getJSONArray("liked");
+            for (int i = 0; i<peopleLiked.length(); i++) {
+                try {
+                    if (peopleLiked.getString(i).equals(ParseUser.getCurrentUser().getObjectId().toString())) {
+                        peopleLiked.remove(i);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            post.setLiked(peopleLiked);
+            post.saveInBackground();
+            ivHeart.setImageResource(R.drawable.ufi_heart);
+        }
+
         private void showCommentFragment() {
             FragmentManager fm = ((MainActivity) context).getSupportFragmentManager();
             CommentFragment commentFragment = CommentFragment.newInstance();
@@ -162,6 +224,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             ParseFile profile = post.getUser().getParseFile("profile");
             if (profile != null) {
                 Glide.with(context).load(profile.getUrl()).into(ivProfile);
+            }
+
+            if (hasLiked()) {
+                ivHeart.setImageResource(R.drawable.ufi_heart_active);
+            } else {
+                ivHeart.setImageResource(R.drawable.ufi_heart);
             }
         }
 

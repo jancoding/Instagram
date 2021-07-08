@@ -8,6 +8,7 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
+import org.json.JSONArray;
 import org.parceler.Parcel;
 
 import java.io.Serializable;
@@ -20,6 +21,7 @@ public class Post extends ParseObject implements Serializable {
     public static final String KEY_IMAGE = "image";
     public static final String KEY_USER = "user";
     public static final String KEY_LIKE = "like";
+    public static final String KEY_LIKED = "liked";
 
     public String getDescription() {
         return getString(KEY_DESCRIPTION);
@@ -51,6 +53,14 @@ public class Post extends ParseObject implements Serializable {
 
     public void setLikes(int likes) {
         put(KEY_LIKE, likes);
+    }
+
+    public JSONArray getLiked() {
+        return getJSONArray(KEY_LIKED);
+    }
+
+    public void setLiked(JSONArray liked) {
+        put(KEY_LIKED, liked);
     }
 
 
