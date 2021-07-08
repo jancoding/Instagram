@@ -99,7 +99,7 @@ public class FeedActivity extends AppCompatActivity {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
         // limit query to latest 20 items
-        query.setLimit(6);
+        query.setLimit(20);
         // order posts by creation date (newest first)
         query.addDescendingOrder("createdAt");
         // Execute the find asynchronously
@@ -124,7 +124,7 @@ public class FeedActivity extends AppCompatActivity {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
         // limit query to latest 20 items
-        query.setLimit(6);
+        query.setLimit(20);
         // order posts by creation date (newest first)
         query.addDescendingOrder("createdAt");
         // Execute the find asynchronously

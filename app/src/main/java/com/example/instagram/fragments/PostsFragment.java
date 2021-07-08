@@ -87,7 +87,7 @@ public class PostsFragment extends Fragment {
                 // Your code to refresh the list here.
                 // Make sure you call swipeContainer.setRefreshing(false)
                 // once the network request has completed successfully.
-                fetchPostsAsync(0);
+                getPosts();
             }
         });
         // Configure the refreshing colors
@@ -110,9 +110,9 @@ public class PostsFragment extends Fragment {
 
     }
 
-
-
     protected void loadNextPosts() {
+        Log.d("PostsFragment", "loading moreee " + oldestDate.toString());
+
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
         query.whereLessThan("createdAt", oldestDate);
@@ -126,41 +126,15 @@ public class PostsFragment extends Fragment {
                 pAdapter.notifyDataSetChanged();
             }
         });
-
-
     }
 
-    protected void fetchPostsAsync(int page) {
-        // Define the class we would like to query
-        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-        query.include(Post.KEY_USER);
-        // limit query to latest 20 items
-        query.setLimit(6);
-        // order posts by creation date (newest first)
-        query.addDescendingOrder("createdAt");
-        // Execute the find asynchronously
-        query.findInBackground(new FindCallback<Post>() {
-            public void done(List<Post> itemList, ParseException e) {
-                if (e == null) {
-                    pAdapter.clear();
-                    posts.addAll(itemList);
-                    setOldest(itemList);
-                    pAdapter.notifyDataSetChanged();
-                    swipeContainer.setRefreshing(false);
-                } else {
-                    Log.d("item", "Error: " + e.getMessage());
-                }
-            }
-        });
-
-    }
 
     protected void getPosts() {
         // Define the class we would like to query
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
         // limit query to latest 20 items
-        query.setLimit(6);
+        query.setLimit(30);
         // order posts by creation date (newest first)
         query.addDescendingOrder("createdAt");
         // Execute the find asynchronously
@@ -172,6 +146,7 @@ public class PostsFragment extends Fragment {
                     posts.addAll(itemList);
                     pAdapter.notifyDataSetChanged();
                     setOldest(itemList);
+                    swipeContainer.setRefreshing(false);
                 } else {
                     Log.d("item", "Error: " + e.getMessage());
                 }

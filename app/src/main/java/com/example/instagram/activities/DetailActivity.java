@@ -1,25 +1,40 @@
 package com.example.instagram.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.instagram.Comment;
+import com.example.instagram.CommentAdapter;
 import com.example.instagram.Post;
 import com.example.instagram.R;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseQuery;
 
 import org.parceler.Parcels;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DetailActivity extends AppCompatActivity {
 
     private Post post;
     TextView tvUsername;
+    TextView tvUsernameTwo;
     TextView tvTime;
     TextView tvDescription;
     ImageView ivImage;
+    RecyclerView rvComments;
+    CommentAdapter commentAdapter;
+    List<Comment> comments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,13 +46,46 @@ public class DetailActivity extends AppCompatActivity {
         tvTime = findViewById(R.id.tvTime);
         tvDescription = findViewById(R.id.tvDescription);
         ivImage = findViewById(R.id.ivImage);
+        tvUsernameTwo = findViewById(R.id.tvUsernameTwo);
+        rvComments = findViewById(R.id.rvComments);
+        comments = new ArrayList<>();
+        commentAdapter = new CommentAdapter(this, comments);
+        rvComments.setAdapter(commentAdapter);
+        rvComments.setLayoutManager(new LinearLayoutManager(this));
+
 
         tvUsername.setText(post.getUser().getUsername());
         tvTime.setText(Post.calculateTimeAgo(post.getCreatedAt()));
         tvDescription.setText(post.getDescription());
+        tvUsernameTwo.setText(post.getUser().getUsername());
         ParseFile image = post.getImage();
         if (image != null) {
             Glide.with(this).load(image.getUrl()).into(ivImage);
         }
+
+        getComments();
+    }
+
+    private void getComments() {
+        // Define the class we would like to query
+        ParseQuery<Comment> query = ParseQuery.getQuery(Comment.class);
+        // limit query to latest 20 items
+        query.setLimit(30);
+        query.whereEqualTo("post", post);
+        // order posts by creation date (newest first)
+        query.addDescendingOrder("createdAt");
+        // Execute the find asynchronously
+        query.findInBackground(new FindCallback<Comment>() {
+            public void done(List<Comment> itemList, ParseException e) {
+                if (e == null) {
+                    // Access the array of results here
+                    commentAdapter.clear();
+                    comments.addAll(itemList);
+                    commentAdapter.notifyDataSetChanged();
+                } else {
+                    Log.d("item", "Error: " + e.getMessage());
+                }
+            }
+        });
     }
 }

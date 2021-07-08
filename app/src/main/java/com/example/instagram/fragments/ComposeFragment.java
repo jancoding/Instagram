@@ -88,7 +88,6 @@ public class ComposeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        btnLogout = view.findViewById(R.id.btnLogout);
         etDescription = view.findViewById(R.id.etDescription);
         btnPicture = view.findViewById(R.id.btnPicture);
         ivPicture = view.findViewById(R.id.ivPicture);
@@ -101,12 +100,7 @@ public class ComposeFragment extends Fragment {
             }
         });
 
-        btnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goLoginActivity();
-            }
-        });
+
 
         //queryPosts();
 

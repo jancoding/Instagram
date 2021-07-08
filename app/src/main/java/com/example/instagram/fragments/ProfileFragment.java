@@ -45,7 +45,7 @@ public class ProfileFragment extends PostsFragment {
                 // Your code to refresh the list here.
                 // Make sure you call swipeContainer.setRefreshing(false)
                 // once the network request has completed successfully.
-                fetchPostsAsync(0);
+                getPosts();
             }
         });
         // Configure the refreshing colors
@@ -75,7 +75,7 @@ public class ProfileFragment extends PostsFragment {
         query.include(Post.KEY_USER);
         query.whereEqualTo(Post.KEY_USER, ParseUser.getCurrentUser());
         // limit query to latest 20 items
-        query.setLimit(6);
+        query.setLimit(20);
         // order posts by creation date (newest first)
         query.addDescendingOrder("createdAt");
         // Execute the find asynchronously
@@ -88,6 +88,7 @@ public class ProfileFragment extends PostsFragment {
                     posts.addAll(itemList);
                     pAdapter.notifyDataSetChanged();
                     setOldest(itemList);
+                    swipeContainer.setRefreshing(false);
                 } else {
                     Log.d("item", "Error: " + e.getMessage());
                 }
@@ -115,30 +116,30 @@ public class ProfileFragment extends PostsFragment {
 
     }
 
-    @Override
-    protected void fetchPostsAsync(int page) {
-        // Define the class we would like to query
-        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-        query.include(Post.KEY_USER);
-        // limit query to latest 20 items
-        query.setLimit(6);
-        // order posts by creation date (newest first)
-        query.addDescendingOrder("createdAt");
-        query.whereEqualTo(Post.KEY_USER, ParseUser.getCurrentUser());
-        // Execute the find asynchronously
-        query.findInBackground(new FindCallback<Post>() {
-            public void done(List<Post> itemList, ParseException e) {
-                if (e == null) {
-                    pAdapter.clear();
-                    posts.addAll(itemList);
-                    setOldest(itemList);
-                    pAdapter.notifyDataSetChanged();
-                    swipeContainer.setRefreshing(false);
-                } else {
-                    Log.d("item", "Error: " + e.getMessage());
-                }
-            }
-        });
-
-    }
+//    @Override
+//    protected void fetchPostsAsync(int page) {
+//        // Define the class we would like to query
+//        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+//        query.include(Post.KEY_USER);
+//        // limit query to latest 20 items
+//        query.setLimit(20);
+//        // order posts by creation date (newest first)
+//        query.addDescendingOrder("createdAt");
+//        query.whereEqualTo(Post.KEY_USER, ParseUser.getCurrentUser());
+//        // Execute the find asynchronously
+//        query.findInBackground(new FindCallback<Post>() {
+//            public void done(List<Post> itemList, ParseException e) {
+//                if (e == null) {
+//                    pAdapter.clear();
+//                    posts.addAll(itemList);
+//                    setOldest(itemList);
+//                    pAdapter.notifyDataSetChanged();
+//                    swipeContainer.setRefreshing(false);
+//                } else {
+//                    Log.d("item", "Error: " + e.getMessage());
+//                }
+//            }
+//        });
+//
+//    }
 }

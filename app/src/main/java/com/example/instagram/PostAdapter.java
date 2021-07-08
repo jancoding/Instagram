@@ -1,17 +1,26 @@
 package com.example.instagram;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.instagram.activities.DetailActivity;
+import com.example.instagram.activities.MainActivity;
+import com.example.instagram.fragments.CommentFragment;
+import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.jetbrains.annotations.NotNull;
@@ -68,6 +77,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         TextView tvDescription;
         ImageView ivImage;
         TextView tvUsernameTwo;
+        TextView tvNumLikes;
+        ImageView ivHeart;
+        ImageView ivComment;
+        ImageView ivProfile;
 
         public ViewHolder(@NonNull View itemView) {
 
@@ -79,16 +92,56 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             tvDescription = itemView.findViewById(R.id.tvDescription);
             ivImage = itemView.findViewById(R.id.ivImage);
             tvUsernameTwo = itemView.findViewById(R.id.tvUsernameTwo);
+            ivHeart = itemView.findViewById(R.id.ivHeart);
+            tvNumLikes = itemView.findViewById(R.id.tvNumLikes);
+            ivComment = itemView.findViewById(R.id.ivComment);
+            ivProfile = itemView.findViewById(R.id.ivProfile);
+
+            ivHeart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Post post = posts.get(getAdapterPosition());
+                    post.setLikes(post.getLikes() + 1);
+                    post.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            tvNumLikes.setText((Integer.parseInt(tvNumLikes.getText().toString()) + 1) + "");
+                        }
+                    });
+                }
+            });
+
+            ivComment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showCommentFragment();
+                }
+            });
+
             itemView.setOnClickListener(this);
+        }
+
+        private void showCommentFragment() {
+            FragmentManager fm = ((MainActivity) context).getSupportFragmentManager();
+            CommentFragment commentFragment = CommentFragment.newInstance();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("post", posts.get(getAdapterPosition()));
+            commentFragment.setArguments(bundle);
+            commentFragment.show(fm, "fragment_edit_tweet");
         }
 
         public void bind(Post post, ViewHolder holder) {
             tvDescription.setText(post.getDescription());
             tvUsername.setText(post.getUser().getUsername());
             tvUsernameTwo.setText(post.getUser().getUsername());
+            tvNumLikes.setText(post.getLikes() + "");
             ParseFile image = post.getImage();
             if (image != null) {
                 Glide.with(context).load(image.getUrl()).into(ivImage);
+            }
+            ParseFile profile = post.getUser().getParseFile("profile");
+            if (profile != null) {
+                Glide.with(context).load(profile.getUrl()).into(ivProfile);
             }
         }
 
