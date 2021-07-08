@@ -121,7 +121,6 @@ public class ComposeFragment extends Fragment {
                 }
                 ParseUser currentUser = ParseUser.getCurrentUser();
                 savePost(description, currentUser, photoFile);
-                launchFeedActivity();
             }
         });
     }
@@ -205,6 +204,7 @@ public class ComposeFragment extends Fragment {
                 etDescription.setText("");
                 ivPicture.setImageResource(0);
                 pb.setVisibility(ProgressBar.INVISIBLE);
+                launchFeedActivity();
             }
         });
     }
