@@ -3,10 +3,13 @@ package com.example.instagram.fragments;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,13 +26,35 @@ import com.parse.ParseUser;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-public class ProfileFragment extends PostsFragment {
+public class ProfileFragment extends Fragment {
+
+    private RecyclerView rvPosts;
+    private PostAdapter pAdapter;
+    private List<Post> posts = new ArrayList<>();
+    private SwipeRefreshLayout swipeContainer;
+    private Date oldestDate = new Date(System.currentTimeMillis());
+    private EndlessRecyclerViewScrollListener scrollListener;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_profilepost, container, false);
+    }
+
 
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
         rvPosts = view.findViewById(R.id.rvPosts);
         pAdapter = new PostAdapter(getContext(), posts);
         rvPosts.setAdapter(pAdapter);
@@ -59,21 +84,29 @@ public class ProfileFragment extends PostsFragment {
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to the bottom of the list
-                loadNextPosts();
+//                loadNextPosts();
             }
         };
         // Adds the scroll listener to RecyclerView
         rvPosts.addOnScrollListener(scrollListener);
+        Log.d("ProfileFragment", "calling onviewcreated in profile fragment right now");
         getPosts();
 
     }
 
-    @Override
-    protected void getPosts() {
+    private void getPosts() {
         // Define the class we would like to query
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
-        query.whereEqualTo(Post.KEY_USER, ParseUser.getCurrentUser());
+        ParseUser user;
+        if (getArguments() == null) {
+            user = ParseUser.getCurrentUser();
+            Log.d("ProfileFragment", "general usernames is " + user.getUsername());
+        } else {
+            user = ((Post) getArguments().getSerializable("post")).getParseUser("user");
+            Log.d("ProfileFragment", "specific usernames is " + user.getUsername());
+        }
+        query.whereEqualTo(Post.KEY_USER, user);
         // limit query to latest 20 items
         query.setLimit(20);
         // order posts by creation date (newest first)
@@ -83,12 +116,11 @@ public class ProfileFragment extends PostsFragment {
             public void done(List<Post> itemList, ParseException e) {
                 if (e == null) {
                     // Access the array of results here
-                    pAdapter.clear();
                     posts.clear();
                     posts.addAll(itemList);
                     pAdapter.notifyDataSetChanged();
                     setOldest(itemList);
-                    swipeContainer.setRefreshing(false);
+//                    swipeContainer.setRefreshing(false);
                 } else {
                     Log.d("item", "Error: " + e.getMessage());
                 }
@@ -96,50 +128,30 @@ public class ProfileFragment extends PostsFragment {
         });
     }
 
-    @Override
-    protected void loadNextPosts() {
-        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-        query.include(Post.KEY_USER);
-        query.whereLessThan("createdAt", oldestDate);
-        query.setLimit(20);
-        query.whereEqualTo(Post.KEY_USER, ParseUser.getCurrentUser());
-        query.addDescendingOrder("createdAt");
-        query.findInBackground(new FindCallback<Post>() {
-            @Override
-            public void done(List<Post> objects, ParseException e) {
-                posts.addAll(objects);
-                setOldest(objects);
-                pAdapter.notifyDataSetChanged();
-            }
-        });
-
-
-    }
-
-//    @Override
-//    protected void fetchPostsAsync(int page) {
-//        // Define the class we would like to query
+//    private void loadNextPosts() {
 //        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
 //        query.include(Post.KEY_USER);
-//        // limit query to latest 20 items
+//        query.whereLessThan("createdAt", oldestDate);
 //        query.setLimit(20);
-//        // order posts by creation date (newest first)
-//        query.addDescendingOrder("createdAt");
 //        query.whereEqualTo(Post.KEY_USER, ParseUser.getCurrentUser());
-//        // Execute the find asynchronously
+//        query.addDescendingOrder("createdAt");
 //        query.findInBackground(new FindCallback<Post>() {
-//            public void done(List<Post> itemList, ParseException e) {
-//                if (e == null) {
-//                    pAdapter.clear();
-//                    posts.addAll(itemList);
-//                    setOldest(itemList);
-//                    pAdapter.notifyDataSetChanged();
-//                    swipeContainer.setRefreshing(false);
-//                } else {
-//                    Log.d("item", "Error: " + e.getMessage());
-//                }
+//            @Override
+//            public void done(List<Post> objects, ParseException e) {
+//                posts.addAll(objects);
+//                setOldest(objects);
+//                pAdapter.notifyDataSetChanged();
 //            }
 //        });
-//
 //    }
+
+    private void setOldest(List<Post> posts) {
+        for (Post post: posts) {
+            if (post.getCreatedAt().before(oldestDate)) {
+                oldestDate = post.getCreatedAt();
+            }
+        }
+    }
+
+
 }

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,9 @@ import com.bumptech.glide.Glide;
 import com.example.instagram.activities.DetailActivity;
 import com.example.instagram.activities.MainActivity;
 import com.example.instagram.fragments.CommentFragment;
+import com.example.instagram.fragments.PostsFragment;
+import com.example.instagram.fragments.ProfileFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
@@ -21,6 +25,7 @@ import com.parse.SaveCallback;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.jetbrains.annotations.NotNull;
@@ -108,6 +113,21 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                             tvNumLikes.setText((Integer.parseInt(tvNumLikes.getText().toString()) + 1) + "");
                         }
                     });
+                }
+            });
+
+            ivProfile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FragmentTransaction fragmentTransaction = ((MainActivity) context).getSupportFragmentManager().beginTransaction();
+                    ProfileFragment profileFragment = new ProfileFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("post", posts.get(getAdapterPosition()));
+                    profileFragment.setArguments(bundle);
+                    Log.d("PostsAdapter","set arguments of profile fragment");
+                    fragmentTransaction.replace(R.id.rlMain, profileFragment);
+                    fragmentTransaction.commit();
+
                 }
             });
 
