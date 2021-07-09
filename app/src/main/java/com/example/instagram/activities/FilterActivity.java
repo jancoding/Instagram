@@ -64,11 +64,5 @@ public class FilterActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-
-
-
-
     }
 }
