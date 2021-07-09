@@ -103,10 +103,6 @@ public class ComposeFragment extends Fragment {
             }
         });
 
-
-
-        //queryPosts();
-
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

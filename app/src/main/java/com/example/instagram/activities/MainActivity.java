@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(i);
         } else if (item.getItemId() == R.id.miCamera) {
             launchCamera();
+
         }
         return super.onOptionsItemSelected(item);
     }
