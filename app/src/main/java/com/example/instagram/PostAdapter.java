@@ -24,6 +24,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
@@ -116,7 +117,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                         post.saveInBackground(new SaveCallback() {
                             @Override
                             public void done(ParseException e) {
-                                tvNumLikes.setText((Integer.parseInt(tvNumLikes.getText().toString()) - 1) + "");
+                                tvNumLikes.setText((Integer.parseInt(tvNumLikes.getText().toString()) - 1));
                                 updateDatabaseUnliked();
                             }
                         });
@@ -126,7 +127,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                         post.saveInBackground(new SaveCallback() {
                             @Override
                             public void done(ParseException e) {
-                                tvNumLikes.setText((Integer.parseInt(tvNumLikes.getText().toString()) + 1) + "");
+                                tvNumLikes.setText((Integer.parseInt(tvNumLikes.getText().toString()) + 1));
                                 updateDatabaseLiked();
                             }
                         });
@@ -185,6 +186,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             post.setLiked(peopleLiked);
             post.saveInBackground();
             ivHeart.setImageResource(R.drawable.ufi_heart_active);
+            ivHeart.setColorFilter(ContextCompat.getColor(context, R.color.medium_red), android.graphics.PorterDuff.Mode.SRC_IN);
+
         }
         private void updateDatabaseUnliked()  {
             Post post = posts.get(getAdapterPosition());
@@ -215,7 +218,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         public void bind(Post post, ViewHolder holder) {
             tvDescription.setText(post.getDescription());
             tvUsername.setText(post.getUser().getUsername());
-            tvUsernameTwo.setText(post.getUser().getUsername());
+//            tvUsernameTwo.setText(post.getUser().getUsername());
             tvNumLikes.setText(post.getLikes() + "");
             ParseFile image = post.getImage();
             if (image != null) {
@@ -228,6 +231,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
             if (hasLiked()) {
                 ivHeart.setImageResource(R.drawable.ufi_heart_active);
+                ivHeart.setColorFilter(ContextCompat.getColor(context, R.color.medium_red), android.graphics.PorterDuff.Mode.SRC_IN);
             } else {
                 ivHeart.setImageResource(R.drawable.ufi_heart);
             }
