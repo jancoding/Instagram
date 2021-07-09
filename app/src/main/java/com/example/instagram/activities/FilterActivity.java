@@ -13,6 +13,7 @@ import com.google.ar.sceneform.Scene;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.rendering.Renderable;
 import com.google.ar.sceneform.rendering.Texture;
+import com.google.ar.sceneform.rendering.ViewRenderable;
 import com.google.ar.sceneform.ux.AugmentedFaceNode;
 
 import java.util.Collection;
@@ -33,10 +34,11 @@ public class FilterActivity extends AppCompatActivity {
         ModelRenderable.builder().setSource(this, R.raw.fox_face)
                 .build()
                 .thenAccept(renderable -> {
-                    modelRenderable = renderable;
-                    modelRenderable.setShadowCaster(false);
-                    modelRenderable.setShadowReceiver(false);
+                    this.modelRenderable = renderable;
+                    this.modelRenderable.setShadowCaster(false);
+                    this.modelRenderable.setShadowReceiver(false);
                 });
+
 
         Texture.builder()
                 .setSource(this, R.drawable.fox_face_mesh_texture)
@@ -58,7 +60,7 @@ public class FilterActivity extends AppCompatActivity {
                         return;
                     AugmentedFaceNode augmentedFaceNode = new AugmentedFaceNode(augmentedFace);
                     augmentedFaceNode.setParent(customARFragment.getArSceneView().getScene());
-                    augmentedFaceNode.setFaceRegionsRenderable(modelRenderable);
+                    augmentedFaceNode.setRenderable(modelRenderable);
                     augmentedFaceNode.setFaceMeshTexture(texture);
                     isAdded = true;
                 }

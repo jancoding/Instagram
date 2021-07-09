@@ -43,4 +43,13 @@
         android:text="Submit"
         />
 
+    <Button
+        android:id="@+id/btnSelect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnPicture"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="Select Picture" />
+
 </RelativeLayout>
