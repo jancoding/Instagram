@@ -1,6 +1,7 @@
 package com.example.instagram.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -10,16 +11,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.instagram.Comment;
-import com.example.instagram.CommentAdapter;
-import com.example.instagram.Post;
+import com.example.instagram.models.Comment;
+import com.example.instagram.adapters.CommentAdapter;
+import com.example.instagram.models.Post;
 import com.example.instagram.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
-import org.parceler.Parcels;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,10 +34,12 @@ public class DetailActivity extends AppCompatActivity {
     TextView tvUsernameTwo;
     TextView tvTime;
     TextView tvDescription;
+    ImageView ivHeart;
     ImageView ivImage;
     RecyclerView rvComments;
     CommentAdapter commentAdapter;
     List<Comment> comments;
+    TextView tvNumLikes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,14 +51,19 @@ public class DetailActivity extends AppCompatActivity {
         tvTime = findViewById(R.id.tvTime);
         tvDescription = findViewById(R.id.tvDescription);
         ivImage = findViewById(R.id.ivImage);
+        ivHeart = findViewById(R.id.ivHeart);
         tvUsernameTwo = findViewById(R.id.tvUsernameTwo);
         rvComments = findViewById(R.id.rvComments);
+        tvNumLikes = findViewById(R.id.tvNumLikes);
         comments = new ArrayList<>();
         commentAdapter = new CommentAdapter(this, comments);
         rvComments.setAdapter(commentAdapter);
         rvComments.setLayoutManager(new LinearLayoutManager(this));
+        ivHeart.setColorFilter(ContextCompat.getColor(this, R.color.medium_red), android.graphics.PorterDuff.Mode.SRC_IN);
 
 
+
+        tvNumLikes.setText(post.getLikes() + "");
         tvUsername.setText(post.getUser().getUsername());
         tvTime.setText(Post.calculateTimeAgo(post.getCreatedAt()));
         tvDescription.setText(post.getDescription());
@@ -62,8 +72,31 @@ public class DetailActivity extends AppCompatActivity {
         if (image != null) {
             Glide.with(this).load(image.getUrl()).into(ivImage);
         }
+        if (hasLiked()) {
+            ivHeart.setImageResource(R.drawable.ufi_heart_active);
+        } else {
+            ivHeart.setImageResource(R.drawable.ufi_heart);
+        }
 
         getComments();
+    }
+
+
+    private boolean hasLiked() {
+        Log.d("PostAdapter", "in has liked method" );
+        JSONArray peopleLiked = post.getJSONArray("liked");
+        for (int i = 0; i<peopleLiked.length(); i++) {
+            try {
+                Log.d("PostAdapter",peopleLiked.getString(i) );
+                Log.d("PostAdapter", ParseUser.getCurrentUser().getObjectId().toString() );
+                if (peopleLiked.getString(i).equals(ParseUser.getCurrentUser().getObjectId().toString())) {
+                    return true;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
     }
 
     private void getComments() {

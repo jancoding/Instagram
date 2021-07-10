@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="10dp"
     android:orientation="vertical"
     android:layout_height="wrap_content">
@@ -10,6 +11,9 @@
         android:id="@+id/tvUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
         tools:text="janvishahaha" />
@@ -24,28 +28,65 @@
 
     <ImageView
         android:id="@+id/ivImage"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_below="@+id/tvUsername"
-        />
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="9dp"
+        android:layout_marginBottom="10dp" />
 
     <ImageView
         android:id="@+id/ivHeart"
         android:layout_width="30dp"
-        android:layout_marginBottom="10dp"
         android:layout_height="30dp"
         android:layout_below="@+id/ivImage"
         android:layout_marginLeft="6dp"
         android:src="@drawable/ufi_heart" />
 
+    <TextView
+        android:id="@+id/tvNumLikes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivHeart"
+        android:layout_marginLeft="7dp"
+        android:layout_marginTop="1dp"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        tools:text="142" />
+
+    <TextView
+        android:id="@+id/likes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivHeart"
+        android:layout_marginLeft="7dp"
+        android:layout_marginTop="1dp"
+        android:layout_toRightOf="@+id/tvNumLikes"
+        android:text="likes"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold" />
     <ImageView
         android:id="@+id/ivComment"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_below="@+id/ivImage"
-        android:layout_marginLeft="6dp"
+        android:layout_marginLeft="10dp"
         android:layout_toRightOf="@id/ivHeart"
         android:src="@drawable/ufi_comment" />
+
+    <ImageView
+        android:id="@+id/ivDirectMsg"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_below="@+id/ivImage"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginEnd="0dp"
+        android:layout_toRightOf="@+id/ivComment"
+        app:srcCompat="@drawable/ufi_new_direct" />
+
 
     <ImageView
         android:id="@+id/ivTage"
@@ -56,12 +97,14 @@
         android:layout_marginRight="6dp"
         android:src="@drawable/ufi_save" />
 
+
     <TextView
         android:id="@+id/tvUsernameTwo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ivHeart"
+        android:layout_below="@+id/tvNumLikes"
         android:layout_marginLeft="7dp"
+        android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold"
         tools:text="janvishahaha" />
@@ -70,9 +113,9 @@
         android:id="@+id/tvDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/tvUsernameTwo"
+        android:layout_below="@+id/tvNumLikes"
         android:layout_marginLeft="10dp"
-        android:layout_below="@+id/ivHeart"
+        android:layout_toRightOf="@+id/tvUsernameTwo"
         tools:text="my headshot" />
 
     <androidx.recyclerview.widget.RecyclerView

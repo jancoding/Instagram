@@ -29,7 +29,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.instagram.activities.LoginActivity;
-import com.example.instagram.Post;
+import com.example.instagram.models.Post;
 import com.example.instagram.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.FindCallback;

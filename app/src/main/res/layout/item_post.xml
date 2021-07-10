@@ -12,14 +12,17 @@
         android:id="@+id/ivProfile"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        app:srcCompat="@drawable/instagram_user_filled_24" />
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/default_user_avatar" />
+
     <TextView
         android:id="@+id/tvUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
-        android:layout_toRightOf="@+id/ivProfile"
         android:layout_marginBottom="10dp"
+        android:layout_toRightOf="@+id/ivProfile"
+        android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
         tools:text="janvishahaha" />
@@ -39,29 +42,51 @@
         android:layout_height="30dp"
         android:layout_below="@+id/ivImage"
         android:layout_marginLeft="6dp"
-        android:layout_marginBottom="10dp"
         android:src="@drawable/ufi_heart" />
 
     <TextView
         android:id="@+id/tvNumLikes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ivImage"
+        android:layout_below="@+id/ivHeart"
         android:layout_marginLeft="7dp"
-        android:layout_marginTop="5dp"
-        android:layout_toRightOf="@+id/ivHeart"
+        android:layout_marginTop="1dp"
+        android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold"
         tools:text="142" />
 
+    <TextView
+        android:id="@+id/likes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivHeart"
+        android:layout_marginLeft="7dp"
+        android:layout_marginTop="1dp"
+        android:layout_toRightOf="@+id/tvNumLikes"
+        android:text="likes"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold" />
     <ImageView
         android:id="@+id/ivComment"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_below="@+id/ivImage"
         android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@id/tvNumLikes"
+        android:layout_toRightOf="@id/ivHeart"
         android:src="@drawable/ufi_comment" />
+
+    <ImageView
+        android:id="@+id/ivDirectMsg"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_below="@+id/ivImage"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginEnd="0dp"
+        android:layout_toRightOf="@+id/ivComment"
+        app:srcCompat="@drawable/ufi_new_direct" />
 
 
     <ImageView
@@ -78,8 +103,9 @@
         android:id="@+id/tvUsernameTwo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ivHeart"
+        android:layout_below="@+id/tvNumLikes"
         android:layout_marginLeft="7dp"
+        android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold"
         tools:text="janvishahaha" />
@@ -88,7 +114,7 @@
         android:id="@+id/tvDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ivHeart"
+        android:layout_below="@+id/tvNumLikes"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/tvUsernameTwo"
         tools:text="my headshot" />
