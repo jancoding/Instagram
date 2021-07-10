@@ -7,6 +7,10 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+<<<<<<< HEAD
+=======
+    <color name="boundary_gray">#DCDCDC</color>
+>>>>>>> 0481cdf5bef8df4b5a4eb4308c2ab30e29f6d1e3
     <color name="medium_red">#EA094E</color>
 
 </resources>

@@ -117,7 +117,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                         post.saveInBackground(new SaveCallback() {
                             @Override
                             public void done(ParseException e) {
-                                tvNumLikes.setText((Integer.parseInt(tvNumLikes.getText().toString()) - 1) + "");
+                                tvNumLikes.setText((Integer.parseInt(tvNumLikes.getText().toString()) - 1));
                                 updateDatabaseUnliked();
                             }
                         });
@@ -127,7 +127,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                         post.saveInBackground(new SaveCallback() {
                             @Override
                             public void done(ParseException e) {
-                                tvNumLikes.setText((Integer.parseInt(tvNumLikes.getText().toString()) + 1) + "");
+                                tvNumLikes.setText((Integer.parseInt(tvNumLikes.getText().toString()) + 1));
                                 updateDatabaseLiked();
                             }
                         });
@@ -186,6 +186,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             post.setLiked(peopleLiked);
             post.saveInBackground();
             ivHeart.setImageResource(R.drawable.ufi_heart_active);
+<<<<<<< HEAD:app/src/main/java/com/example/instagram/adapters/PostAdapter.java
+=======
+            ivHeart.setColorFilter(ContextCompat.getColor(context, R.color.medium_red), android.graphics.PorterDuff.Mode.SRC_IN);
+>>>>>>> 0481cdf5bef8df4b5a4eb4308c2ab30e29f6d1e3:app/src/main/java/com/example/instagram/PostAdapter.java
 
         }
         private void updateDatabaseUnliked()  {
@@ -217,7 +221,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         public void bind(Post post, ViewHolder holder) {
             tvDescription.setText(post.getDescription());
             tvUsername.setText(post.getUser().getUsername());
-            tvUsernameTwo.setText(post.getUser().getUsername());
+//            tvUsernameTwo.setText(post.getUser().getUsername());
             tvNumLikes.setText(post.getLikes() + "");
             ParseFile image = post.getImage();
             if (image != null) {
@@ -232,6 +236,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
             if (hasLiked()) {
                 ivHeart.setImageResource(R.drawable.ufi_heart_active);
+                ivHeart.setColorFilter(ContextCompat.getColor(context, R.color.medium_red), android.graphics.PorterDuff.Mode.SRC_IN);
             } else {
                 ivHeart.setImageResource(R.drawable.ufi_heart);
             }
